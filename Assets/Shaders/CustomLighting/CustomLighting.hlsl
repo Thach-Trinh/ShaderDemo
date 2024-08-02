@@ -1,22 +1,4 @@
-//void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, 
-//	out float DistanceAtten, out float ShadowAtten)
-//{
-//#ifdef SHADERGRAPH_PREVIEW
-//    Direction = normalize(float3(0.5f, 0.5f, 0.25f));
-//    Color = float3(1.0f, 1.0f, 1.0f);
-//    DistanceAtten = 1.0f;
-//    ShadowAtten = 1.0f;
-//#else
-//    float4 shadowCoord = TransformWorldToShadowCoord(WorldPos);
-//    Light mainLight = GetMainLight(shadowCoord);
-//    Direction = mainLight.direction;
-//    Color = mainLight.color;
-//    DistanceAtten = mainLight.distanceAttenuation;
-//    ShadowAtten = mainLight.shadowAttenuation;
-//#endif
-//}
-
-void MainLight_half(half3 WorldPos, out half3 Direction, out half3 Color, 
+void GetMainLight_half(half3 WorldPos, out half3 Direction, out half3 Color, 
 	out half DistanceAtten, out half ShadowAtten)
 {
 #if SHADERGRAPH_PREVIEW
@@ -39,6 +21,47 @@ void MainLight_half(half3 WorldPos, out half3 Direction, out half3 Color,
 #endif
 }
 
+void GetAdditionalLight_half(int index, half3 worldpos, out half3 direction, out half3 color, out half distanceatten, out half shadowatten)
+{
+
+#ifdef SHADERGRAPH_PREVIEW
+    direction = float3(0.5, 0.5, 0);
+    color = 1;
+    distanceatten = 1;
+    shadowatten = 1;
+#else
+    Light light = GetAdditionalLight(index, worldpos);
+    direction = light.direction;
+    color = light.color;
+    distanceatten = light.distanceAttenuation;
+    shadowatten = light.shadowAttenuation;
+#endif
+}
+
+
+
+void GetAdditionalLightCount_half(out int pixelLightCount)
+{
+#ifdef SHADERGRAPH_PREVIEW
+    pixelLightCount = 0;
+#else
+    pixelLightCount = GetAdditionalLightsCount();
+#endif
+}
+
+
+
+
+void LambertDiffuse_half(half3 color, half3 direction, half3 worldNormal, out half3 Out)
+{
+#if SHADERGRAPH_PREVIEW
+    Out = 0;
+#else
+    Out = LightingLambert(color, direction, worldNormal);
+#endif
+}
+
+
 void DirectSpecular_half(half3 Specular, half Smoothness, half3 Direction, half3 Color, half3 WorldNormal, half3 WorldView, out half3 Out)
 {
 #if SHADERGRAPH_PREVIEW
@@ -52,7 +75,9 @@ void DirectSpecular_half(half3 Specular, half Smoothness, half3 Direction, half3
 }
 
 
-void AdditionalLights_half(half3 SpecColor, half Smoothness, half3 WorldPosition, half3 WorldNormal, half3 WorldView, out half3 Diffuse, out half3 Specular)
+
+
+void CalculateAdditionalLights_half(half3 SpecColor, half Smoothness, half3 WorldPosition, half3 WorldNormal, half3 WorldView, out half3 Diffuse, out half3 Specular)
 {
     half3 diffuseColor = 0;
     half3 specularColor = 0;

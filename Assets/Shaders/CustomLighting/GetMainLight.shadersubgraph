@@ -202,15 +202,15 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "MainLight (Custom Function)",
+    "m_Name": "GetMainLight (Custom Function)",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -71.19999694824219,
-            "y": -22.399982452392579,
-            "width": 212.0,
-            "height": 165.59999084472657
+            "x": -69.5999984741211,
+            "y": -22.399999618530275,
+            "width": 232.0,
+            "height": 165.60000610351563
         }
     },
     "m_Slots": [
@@ -242,7 +242,7 @@
         "m_SerializableColors": []
     },
     "m_SourceType": 0,
-    "m_FunctionName": "MainLight",
+    "m_FunctionName": "GetMainLight",
     "m_FunctionSource": "e1bc7c2583d73a449a0f7c2f00017252",
     "m_FunctionBody": "Enter function body here..."
 }
